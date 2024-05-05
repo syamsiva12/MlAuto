@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import pandas as pd 
 # Create your views here.
 
@@ -14,12 +14,29 @@ def upload_file(request):
         file = request.FILES['file']
         if file.name.endswith('.csv'):
             df = pd.read_csv(file)
-            print(df.head())
         elif file.name.endswith('.xlsx'):
             df = pd.read_excel(file)
-            print(df.head())
         else:
             return render(request, 'upload.html', {'error': 'Invalid file type'})
-        # Do something with the DataFrame (e.g., save to database)
-        return render(request, 'upload.html', {'success': 'File uploaded successfully'})
+        
+        if 'start_eda' in request.POST:
+            print('eda started')
+        
+        # Render the DataFrame in the HTML template
+        return render(request, 'display_dataframe.html', {'dataframe': df.to_html()})
+    
     return render(request, 'upload.html')
+
+def start_eda(request):
+    if request.method == 'POST':
+        if request.is_ajax() and request.POST.get('action') == 'start_eda':
+            # Perform start EDA action
+            # For example:
+            # eda_results = perform_eda()
+            # return JsonResponse({'success': True, 'eda_results': eda_results})
+            print("success")
+            return render(request, 'start_eda_result.html')
+        else:
+            return render(request, 'start_eda_result.html')
+    else:
+        return JsonResponse({'success': False, 'message': 'Invalid request.'})

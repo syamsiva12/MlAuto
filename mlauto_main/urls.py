@@ -21,4 +21,5 @@ urlpatterns = [
    path('', views.app_level, name='app_level'),
    path('start-project/',views.start_project,name='start-project'),
    path('upload/',views.upload_file, name= 'upload'),
+   path('start-eda/', views.start_eda, name='start_eda'),
 ]
