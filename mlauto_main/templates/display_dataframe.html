@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uploaded DataFrame</title>
+    <style>
+        .scrollable-table {
+            max-height: 400px; /* Adjust the height as needed */
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h2>Uploaded DataFrame</h2>
+    <div class="scrollable-table">
+        {{ dataframe|safe }}
+    </div>
+    <form id="eda-form">
+        {% csrf_token %}
+        <button type="button" id="start-eda">Start EDA</button>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#start-eda').click(function() {
+                $.ajax({
+                    url: '/start-eda/',
+                    method: 'POST',
+                    data: $('#eda-form').serialize() + '&action=start_eda',
+                    success: function(response) {
+                        console.log(response);
+                        // Handle success response (if needed)
+                        // For example, display a success message
+                        alert('EDA process started successfully.');
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        // Handle error response (if needed)
+                        // For example, display an error message
+                        alert('Failed to start EDA process.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
